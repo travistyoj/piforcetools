@@ -9,7 +9,6 @@
 import struct, sys
 import socket
 import time
-from Crypto.Cipher import DES
 from Adafruit_CharLCDPlate import Adafruit_CharLCDPlate
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
