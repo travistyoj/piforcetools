@@ -1,4 +1,0 @@
-Description='A basic dhcp ethernet connection'
-Interface=eth0
-Connection=ethernet
-IP=dhcp

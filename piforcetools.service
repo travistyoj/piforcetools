@@ -7,8 +7,8 @@ Type=notify
 Restart=always
 User=root
 Group=root
-WorkingDirectory=/root/piforcetools/
-ExecStart=/root/piforcetools/piforcetools.py
+WorkingDirectory=/boot/piforcetools/
+ExecStart=/boot/piforcetools/piforcetools.py
 
 [Install]
 WantedBy=multi-user.target
