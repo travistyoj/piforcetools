@@ -1,0 +1,14 @@
+[Unit]
+Description=Piforce Tools v1.1
+After=syslog.target
+
+[Service]
+Type=notify
+Restart=always
+User=root
+Group=root
+WorkingDirectory=/root/piforcetools/
+ExecStart=/root/piforcetools/piforcetools.py
+
+[Install]
+WantedBy=multi-user.target
