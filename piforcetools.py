@@ -1,8 +1,9 @@
-#!/usr/bin/python
+#!/usr/bin/python2
 # Written by Capane.us
 
 import os, collections, signal, sys
 import triforcetools
+from systemd import daemon
 from Adafruit_CharLCDPlate import Adafruit_CharLCDPlate
 from time import sleep
 
@@ -11,8 +12,8 @@ from time import sleep
 # you like.  At load time, files that don't exist will be purge from the dictionary, so no need to trim this.  
 # If you have a ROM dump with a different filename, either rename the .bin file or change the config here. 
 
-triforce_ip = "192.168.1.2"     # Set this to whatever you want to configure your netdimm as
-rom_dir     = "/home/pi/roms/"  # Set absolute path of rom files ending with trailing /
+ips = ["192.168.1.2", "192.168.1.3", "192.168.1.4", "192.168.1.5"] # Add or remove as many endpoints as you want
+rom_dir = "/roms/"  # Set absolute path of rom files ending with trailing /
 
          # Atomiswave Games
 games = {"Knights of Valor\nSeven Spirits":    "kov7spirits.bin",
@@ -166,7 +167,7 @@ games = {"Knights of Valor\nSeven Spirits":    "kov7spirits.bin",
          "Virtua Striker\n2002":               "vs2002e.bin",
          "Virtua Striker 4\nv2006":            "vs406.bin",
          "Virtua Striker 4\n2006 (Export)":    "Virtua_Striker_4_2006_Exp.bin"}
-commands = ["Shutdown", "Restart", "Enable DHCP", "Enable Static", "Ping Netdimm"]
+commands = ["Change Target", "Shutdown", "Restart", "Enable DHCP", "Enable Static", "Ping Netdimm"]
 
 # Define a signal handler to turn off LCD before shutting down
 def handler(signum = None, frame = None):
@@ -176,6 +177,9 @@ def handler(signum = None, frame = None):
     sys.exit(0)
 signal.signal(signal.SIGTERM , handler)
 
+# We are up, so tell systemd
+daemon.notify("READY=1")
+
 # Purge game dictionary of game files that can't be found
 missing_games = []
 for key, value in games.iteritems():
@@ -183,16 +187,17 @@ for key, value in games.iteritems():
         missing_games.append(key)
 for missing_game in missing_games:
     del games[missing_game]
-if not os.path.isfile("/etc/network/interfaces.dhcp"):
+if not os.path.isfile("netctl/ethernet-dhcp"):
     commands.remove("Enable DHCP")
-if not os.path.isfile("/etc/network/interfaces.static"):
+if not os.path.isfile("netctl/ethernet-static"):
     commands.remove("Enable Static")
 
 # Initialize LCD
 pressedButtons = []
+curr_ip = 0
 lcd = Adafruit_CharLCDPlate()
 lcd.begin(16, 2)
-lcd.message(" Piforce Tools\n   Ver. 1.0")
+lcd.message(" Piforce Tools\n   Ver. 1.1")
 sleep(2)
 lcd.clear()
 if len(games) is 0:
@@ -219,15 +224,20 @@ while True:
                 os.system("shutdown -h now")
             elif selection is "Restart":    
                 os.system("shutdown -r now")
+            elif selection is "Change Target":
+                curr_ip += 1
+                if curr_ip >= len(ips):
+                    curr_ip = 0
+                lcd.message("\n"+ips[curr_ip])
             elif selection is "Enable DHCP":
-                os.system("cp /etc/network/interfaces.dhcp /etc/network/interfaces")
+                os.system("cp netctl/ethernet-dhcp /etc/netctl/eth0")
                 lcd.clear()                
                 lcd.message("Enabled DHCP")
                 sleep(1)
                 lcd.clear()
                 lcd.message(selection)
             elif selection is "Enable Static":
-                os.system("cp /etc/network/interfaces.static /etc/network/interfaces")
+                os.system("cp netctl/ethernet-static /etc/netctl/eth0")
                 lcd.clear()
                 lcd.message("Enabled Static")
                 sleep(1)
@@ -235,8 +245,8 @@ while True:
                 lcd.message(selection)
             elif selection is "Ping Netdimm":
                 lcd.clear()
-                lcd.message("Pinging\n"+triforce_ip)
-                response = os.system("ping -c 1 "+triforce_ip)
+                lcd.message("Pinging\n"+ips[curr_ip])
+                response = os.system("ping -c 1 "+ips[curr_ip])
                 lcd.clear()
                 if response == 0:
                     lcd.message("Netdimm is\nreachable!")
@@ -250,7 +260,7 @@ while True:
                 lcd.message("Connecting...")
 
                 try:
-                    triforcetools.connect(triforce_ip, 10703)
+                    triforcetools.connect(ips[curr_ip], 10703)
                 except:
                     lcd.clear()
                     lcd.message("Error:\nConnect Failed")
