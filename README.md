@@ -41,8 +41,6 @@ Now you are finally ready to install Piforce Tools.
 
     ```
     sudo apt-get install python-smbus
-    sudo apt-get install python-dev
-    sudo apt-get install python-rpi.gpio
     sudo apt-get install python-crypto
     ```
 
@@ -52,6 +50,7 @@ Now you are finally ready to install Piforce Tools.
     cd /home/pi
     git clone https://github.com/capane-us/piforcetools.git
     cd piforcetools
+    chmod u+x install.sh
     sudo ./install.sh
     ```
 
