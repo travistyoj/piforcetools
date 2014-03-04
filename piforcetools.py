@@ -245,7 +245,6 @@ while True:
                 lcd.clear()
                 lcd.message(selection)
             else:
-                os.system("logger ")
                 lcd.clear()
                 lcd.message("Connecting...")
 
