@@ -28,23 +28,14 @@ You will need the following items to use Piforce Tools:
 
 Now you are finally ready to install Piforce Tools.
 
-1.  Edit /etc/modules and add the following two lines:
-
-    ```
-    i2c-bcm2708 
-    i2c-dev
-    ```
-
-2. Reboot
-
-3. Use aptitude to install the following packages:
+1. Use aptitude to install the following packages:
 
     ```
     sudo apt-get install python-smbus
     sudo apt-get install python-crypto
     ```
 
-4. Use git to clone piforce tools repo to your pi:
+2. Use git to clone piforce tools repo to your pi:
 
     ```
     cd /home/pi
@@ -56,11 +47,11 @@ Now you are finally ready to install Piforce Tools.
 
     After you install Piforce Tools, on the next boot, your Pi will be configured to have a static assignment of 192.168.1.1.
 
-5. Copy roms you want to load to /home/pi/roms.  You can use scp, ftp, or wget to get them into this directory, or you can mount a USB drive and copy them.
+3. Copy roms you want to load to /home/pi/roms.  You can use scp, ftp, or wget to get them into this directory, or you can mount a USB drive and copy them.
 
-6. (Optional) Edit piforcetools.py if your roms have different files names, or if you want to change the display name.
+4. (Optional) Edit piforcetools.py if your roms have different files names, or if you want to change the display name.
 
-7. Reboot
+5. Reboot
 
 If everything worked, after about 20 seconds you should see the LCD turn on and display the Piforce Tools splash message.  
 
