@@ -1,6 +1,7 @@
 #!/bin/sh
 echo Creating roms directory..
 mkdir /home/pi/roms
+chown pi:pi /home/pi/roms
 
 echo Copying configuration scripts...
 cp piforcetools.sh /etc/init.d/

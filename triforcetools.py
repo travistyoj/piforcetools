@@ -12,11 +12,11 @@ import time
 from Crypto.Cipher import DES
 from Adafruit_CharLCDPlate import Adafruit_CharLCDPlate
 
-s = None;
+s = None
 lcd = Adafruit_CharLCDPlate()
 
 def connect(ip, port):
-	if s != None
+	if s != None:
 		s.shutdown()
 		s.close()
 	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
