@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Piforce Tools : Piforce Tools drives a Raspberry Pi with Adafruit LCD Plate and interfaces with debugmode&#39;s triforce tools to load a NetDIMM board with binaries for a Triforce, Naomi, or Chihiro arcade system." />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Piforce Tools</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/capane-us/piforcetools">View on GitHub</a>
+
+          <h1 id="project_title">Piforce Tools</h1>
+          <h2 id="project_tagline">Piforce Tools drives a Raspberry Pi with Adafruit LCD Plate and interfaces with debugmode&#39;s triforce tools to load a NetDIMM board with binaries for a Triforce, Naomi, or Chihiro arcade system.</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/capane-us/piforcetools/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/capane-us/piforcetools/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a name="piforcetools" class="anchor" href="#piforcetools"><span class="octicon octicon-link"></span></a>PiforceTools</h1>
+
+<p>Piforce Tools drives a Raspberry Pi with Adafruit LCD Plate and interfaces with debugmode's triforce tools to load a NetDIMM board with binaries for a Triforce, Naomi, or Chihiro arcade system.  </p>
+
+<h2>
+<a name="usage" class="anchor" href="#usage"><span class="octicon octicon-link"></span></a>Usage</h2>
+
+<p>Left/Right buttons determine Game mode or Command mode respectively.  Up/Down navigate items within a mode.  Select button will select the item being displayed.  In Command mode, the following commands can be used:</p>
+
+<ol>
+<li>Shutdown - To prevent boot failures, make sure you select Shutdown and wait for all lights to go out (except the red one) before removing power.</li>
+<li>Restart - To force a restart</li>
+<li>Enable DHCP - To switch back to a normal DHCP configuration, select this, and reboot the Pi.</li>
+<li>Enable Static - To switch back to a static configuration, select this, and reboot the Pi</li>
+<li>Ping Netdimm - To test if the Netdimm is reachable via a ping</li>
+</ol><h2>
+<a name="getting-stated" class="anchor" href="#getting-stated"><span class="octicon octicon-link"></span></a>Getting Stated</h2>
+
+<p>You will need the following items to use Piforce Tools:</p>
+
+<ol>
+<li>A Raspberry Pi - <a href="http://www.raspberrypi.org/">http://www.raspberrypi.org/</a> </li>
+<li>An SD Card imaged with Raspbian - <a href="http://www.raspberrypi.org/downloads">http://www.raspberrypi.org/downloads</a>
+</li>
+<li>An assembled Adafruit 16x2 LCD Plate - <a href="http://learn.adafruit.com/adafruit-16x2-character-lcd-plus-keypad-for-raspberry-pi">http://learn.adafruit.com/adafruit-16x2-character-lcd-plus-keypad-for-raspberry-pi</a>
+</li>
+<li>A Naomi, Triforce, or Chihiro arcade system.</li>
+<li>A Netdimm with a zero-key security PIC installed.  I cannot provide links for this, but a modicum of Google-fu will get you what you need.  The netdimm will need to be configured in static mode with an IP address of 192.168.1.2, netmask of 255.255.255.0, and gateway of 192.168.1.1.</li>
+<li>A crossover cable</li>
+</ol><h2>
+<a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h2>
+
+<p>Now you are finally ready to install Piforce Tools.</p>
+
+<ol>
+<li>
+<p>Use aptitude to install the following packages:</p>
+
+<pre><code>sudo apt-get install python-smbus
+sudo apt-get install python-crypto
+</code></pre>
+</li>
+<li>
+<p>Use git to clone piforce tools repo to your pi:</p>
+
+<pre><code>cd /home/pi
+git clone https://github.com/capane-us/piforcetools.git
+cd piforcetools
+chmod u+x install.sh
+sudo ./install.sh
+</code></pre>
+
+<p>After you install Piforce Tools, on the next boot, your Pi will be configured to have a static assignment of 192.168.1.1.</p>
+</li>
+<li><p>Copy roms you want to load to /home/pi/roms.  You can use scp, ftp, or wget to get them into this directory, or you can mount a USB drive and copy them.</p></li>
+<li><p>(Optional) Edit piforcetools.py if your roms have different files names, or if you want to change the display name.</p></li>
+<li><p>Reboot</p></li>
+</ol><p>If everything worked, after about 20 seconds you should see the LCD turn on and display the Piforce Tools splash message.  </p>
+
+<h2>
+<a name="troubleshooting" class="anchor" href="#troubleshooting"><span class="octicon octicon-link"></span></a>Troubleshooting</h2>
+
+<p>I provide this script without warranty, and its not feasible to provide support to everyone, but I want to at least provide some troubleshooting steps </p>
+
+<ul>
+<li>
+<strong>LCD powers on, but no text is displayed.</strong> Make sure you adjust the contrast of the LCD Plate.<br>
+</li>
+<li>
+<strong>LCD does not power on</strong> This could be several different things.  First make sure the LCD Plate is assembled correctly by following the usage instructions on Adafruit's product page.  Run the python script provided there and confirm the LCD Plate works.  Double check your solder work.  Depending on your revision of your Raspberry Pi, you may need to change any lines of the Piforce Tools script to specify the bus number when instantiating the LCD Plate object.  For example, change lcd = Adafruit_CharLCDPlate() to lcd = Adafruit_CharLCDPlate(busnum = 0) for a Rev 1 Pi.</li>
+<li>
+<strong>NO GAMES FOUND! message is displayed</strong> Make sure your roms are in the /home/pi/roms directory and that the filenames match those specified in the piforcetools.py script. </li>
+<li>
+<strong>I keep getting Connect Failed! when I try to send a game</strong> Make sure your target device has been configured to be at 192.168.1.2.</li>
+</ul><h2>
+<a name="credit" class="anchor" href="#credit"><span class="octicon octicon-link"></span></a>Credit</h2>
+
+<p>This could not be done without debugmode's triforce tools script.  All the heavy lifting was done by him, I just made an easy to use interface for his work.  Also shoutout to darksoft for his killer Atomiswave conversions.</p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Piforce Tools maintained by <a href="https://github.com/capane-us">capane-us</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
