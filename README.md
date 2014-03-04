@@ -13,7 +13,7 @@ Left/Right buttons determine Game mode or Command mode respectively.  Up/Down na
 4. Enable Static - To switch back to a static configuration, select this, and reboot the Pi
 5. Ping Netdimm - To test if the Netdimm is reachable via a ping
 
-## Getting Stated
+## Getting Started
 
 You will need the following items to use Piforce Tools:
 
