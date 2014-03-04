@@ -16,6 +16,7 @@ s = None
 lcd = Adafruit_CharLCDPlate()
 
 def connect(ip, port):
+	global s
 	if s != None:
 		s.shutdown()
 		s.close()
