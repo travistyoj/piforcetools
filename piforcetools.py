@@ -229,6 +229,7 @@ while True:
             elif selection is "Enable Static":
                 os.system("cp /etc/network/interfaces.static /etc/network/interfaces")
                 lcd.clear()
+                lcd.message("Enabled Static")
                 sleep(1)
                 lcd.clear()
                 lcd.message(selection)
