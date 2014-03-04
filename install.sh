@@ -12,6 +12,7 @@ cp piforcetools.sh /etc/init.d/
 cp interfaces.* /etc/network/
 
 echo "Installing Piforce Tools as daemon..."
+chmod 755 piforcetools.py
 cd /etc/init.d
 chown root:root piforcetools.sh
 chmod 755 piforcetools.sh
