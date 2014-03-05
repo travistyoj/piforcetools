@@ -13,7 +13,6 @@ from Crypto.Cipher import DES
 from Adafruit_CharLCDPlate import Adafruit_CharLCDPlate
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-lcd = Adafruit_CharLCDPlate()
 
 def connect(ip, port):
 	s.connect((ip, port))
@@ -59,7 +58,6 @@ def DIMM_GetInformation():
 	return readsocket(0x10)
 
 def DIMM_SetInformation(crc, length):
-	lcd.message("\nLength: %08x" % length)
 	s.send(struct.pack("<IIII", 0x1900000C, crc & 0xFFFFFFFF, length, 0))
 
 def DIMM_Upload(addr, data, mark):
