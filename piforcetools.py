@@ -269,6 +269,7 @@ while True:
                 triforcetools.DIMM_UploadFile(rom_dir+games[selection])
                 triforcetools.HOST_Restart()
                 triforcetools.TIME_SetLimit(10*60*1000)
+                trifrocetools.disconnect()
 
                 lcd.ToggleBlink()
                 lcd.clear()

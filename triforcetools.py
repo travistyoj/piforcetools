@@ -12,16 +12,15 @@ import time
 from Crypto.Cipher import DES
 from Adafruit_CharLCDPlate import Adafruit_CharLCDPlate
 
-s = None
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 lcd = Adafruit_CharLCDPlate()
 
 def connect(ip, port):
-	global s
-	if s != None:
-		s.shutdown()
-		s.close()
-	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	s.connect((ip, port))
+
+def disconnect():
+	global s
+	s.close()
 
 # a function to receive a number of bytes with hard blocking
 def readsocket(n):
