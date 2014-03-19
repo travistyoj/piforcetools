@@ -11,7 +11,7 @@ Left/Right buttons determine Game mode or Command mode respectively.  Up/Down na
 2. Restart - To force a restart
 3. Enable DHCP - To switch back to a normal DHCP configuration, select this, and reboot the Pi.
 4. Enable Static - To switch back to a static configuration, select this, and reboot the Pi
-5. Ping Netdimm - To test if the Netdimm is reachable via a ping
+5. Ping Netdimm - To test if the Netdimm is reachable via a ping 
 
 ## Getting Started
 
