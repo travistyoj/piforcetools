@@ -41,7 +41,6 @@ Now you are finally ready to install Piforce Tools.
     cd /home/pi
     git clone https://github.com/capane-us/piforcetools.git
     cd piforcetools
-    chmod u+x install.sh
     sudo ./install.sh
     ```
 
