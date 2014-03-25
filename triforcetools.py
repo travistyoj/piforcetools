@@ -14,6 +14,8 @@ from Adafruit_CharLCDPlate import Adafruit_CharLCDPlate
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 def connect(ip, port):
+	global s
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	s.connect((ip, port))
 
 def disconnect():

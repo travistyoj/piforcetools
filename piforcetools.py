@@ -1,7 +1,7 @@
 #!/usr/bin/python2
 # Written by Capane.us
 
-import os, collections, signal, sys
+import os, collections, signal, sys, subprocess
 import triforcetools
 from systemd import daemon
 from Adafruit_CharLCDPlate import Adafruit_CharLCDPlate
@@ -167,7 +167,7 @@ games = {"Knights of Valor\nSeven Spirits":    "kov7spirits.bin",
          "Virtua Striker\n2002":               "vs2002e.bin",
          "Virtua Striker 4\nv2006":            "vs406.bin",
          "Virtua Striker 4\n2006 (Export)":    "Virtua_Striker_4_2006_Exp.bin"}
-commands = ["Change Target", "Shutdown", "Restart", "Enable DHCP", "Enable Static", "Ping Netdimm"]
+commands = ["Change Target", "Download Update", "Shutdown", "Restart", "Enable DHCP", "Enable Static", "Ping Netdimm"]
 
 # Define a signal handler to turn off LCD before shutting down
 def handler(signum = None, frame = None):
@@ -229,6 +229,25 @@ while True:
                 if curr_ip >= len(ips):
                     curr_ip = 0
                 lcd.message("\n"+ips[curr_ip])
+            elif selection is "Download Update":
+                lcd.clear()
+                lcd.message("Downloading...")
+                lcd.setCursor(14, 0)
+                lcd.ToggleBlink()
+                try:
+                    response = subprocess.check_output(["git", "pull"])
+                except:
+                    response = "Update Error:\nCheck Internet"
+                if response.strip() == "Already up-to-date.":
+                    message = "No Update Found"
+                else:
+                    message = response.strip()
+                lcd.ToggleBlink()
+                lcd.clear()
+                lcd.message(message)
+                sleep(2)
+                lcd.clear()
+                lcd.message(selection)
             elif selection is "Enable DHCP":
                 os.system("cp netctl/ethernet-dhcp /etc/netctl/eth0")
                 lcd.clear()                
@@ -279,7 +298,7 @@ while True:
                 triforcetools.DIMM_UploadFile(rom_dir+games[selection])
                 triforcetools.HOST_Restart()
                 triforcetools.TIME_SetLimit(10*60*1000)
-                trifrocetools.disconnect()
+                triforcetools.disconnect()
 
                 lcd.ToggleBlink()
                 lcd.clear()
