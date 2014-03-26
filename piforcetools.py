@@ -1,7 +1,7 @@
 #!/usr/bin/python2
 # Written by Capane.us
 
-import os, collections, signal, sys, subprocess
+import os, collections, signal, sys, subprocess, socket
 import triforcetools
 from systemd import daemon
 from Adafruit_CharLCDPlate import Adafruit_CharLCDPlate
@@ -234,10 +234,12 @@ while True:
                 lcd.message("Downloading...")
                 lcd.setCursor(14, 0)
                 lcd.ToggleBlink()
+                os.system("mount -o rw,remount /")
                 try:
                     response = subprocess.check_output(["git", "pull"])
                 except:
                     response = "Update Error:\nCheck Internet"
+                os.system("mount -o ro,remount /")
                 if response.strip() == "Already up-to-date.":
                     message = "No Update Found"
                 else:
@@ -249,17 +251,32 @@ while True:
                 lcd.clear()
                 lcd.message(selection)
             elif selection is "Enable DHCP":
+                os.system("mount -o rw,remount /")
                 os.system("cp netctl/ethernet-dhcp /etc/netctl/eth0")
+                os.system("mount -o ro,remount /")
+                lcd.clear()
+                lcd.message("Obtaining IP...")
+                lcd.setCursor(15,0)
+                lcd.ToggleBlink()
+                os.system("ip link set eth0 down")
+                os.system("netctl restart eth0")
+                ip = socket.gethostbyname(socket.getfqdn())
+                lcd.ToggleBlink()
                 lcd.clear()                
-                lcd.message("Enabled DHCP")
-                sleep(1)
+                lcd.message("Enabled DHCP:\n"+ip)
+                sleep(2)
                 lcd.clear()
                 lcd.message(selection)
             elif selection is "Enable Static":
+                os.system("mount -o rw,remount /")
                 os.system("cp netctl/ethernet-static /etc/netctl/eth0")
+                os.system("mount -o ro,remount /")
+                os.system("ip link set eth0 down")
+                os.system("netctl restart eth0")
+                ip = socket.gethostbyname(socket.getfqdn())
                 lcd.clear()
-                lcd.message("Enabled Static")
-                sleep(1)
+                lcd.message("Enabled Static:\n"+ip)
+                sleep(2)
                 lcd.clear()
                 lcd.message(selection)
             elif selection is "Ping Netdimm":
