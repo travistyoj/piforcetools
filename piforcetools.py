@@ -167,7 +167,7 @@ games = {"Knights of Valor\nSeven Spirits":    "kov7spirits.bin",
          "Virtua Striker\n2002":               "vs2002e.bin",
          "Virtua Striker 4\nv2006":            "vs406.bin",
          "Virtua Striker 4\n2006 (Export)":    "Virtua_Striker_4_2006_Exp.bin"}
-commands = ["Change Target", "Download Update", "Shutdown", "Restart", "Enable DHCP", "Enable Static", "Ping Netdimm"]
+commands = ["Change Target", "Download Update", "Shutdown", "Restart", "Enable DHCP", "Enable Static", "Ping Netdimm", "Create ROMS\nPartition"]
 
 # Define a signal handler to turn off LCD before shutting down
 def handler(signum = None, frame = None):
@@ -187,10 +187,14 @@ for key, value in games.iteritems():
         missing_games.append(key)
 for missing_game in missing_games:
     del games[missing_game]
-if not os.path.isfile("netctl/ethernet-dhcp"):
+
+# Remove commands if a network script is missing, or if partition already created
+if not os.path.exists("netctl/ethernet-dhcp"):
     commands.remove("Enable DHCP")
-if not os.path.isfile("netctl/ethernet-static"):
+if not os.path.exists("netctl/ethernet-static"):
     commands.remove("Enable Static")
+if os.path.exists("/roms"):
+    commands.remove("Create ROMS\nPartition")
 
 # Initialize LCD
 pressedButtons = []
@@ -212,7 +216,6 @@ else:
     selection = iterator.next()
     mode = "games"
     lcd.message(selection)
-
 
 while True:
 
@@ -279,6 +282,16 @@ while True:
                 sleep(2)
                 lcd.clear()
                 lcd.message(selection)
+            elif selection is "Create ROMS\nPartition":
+                lcd.clear()
+                lcd.message("Creating/Formatting\nPartition...")
+                lcd.setCursor(12,1)
+                lcd.ToggleBlink()
+                response = os.system("./create_rompart.sh")
+                lcd.clear()
+                lcd.message("Partitioned!\nRebooting...")
+                sleep(2)
+                os.system("shutdown -r now")
             elif selection is "Ping Netdimm":
                 lcd.clear()
                 lcd.message("Pinging\n"+ips[curr_ip])
