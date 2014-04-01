@@ -7,6 +7,9 @@ from systemd import daemon
 from Adafruit_CharLCDPlate import Adafruit_CharLCDPlate
 from time import sleep
 
+# We are up, so tell systemd
+daemon.notify("READY=1")
+
 # First we define a dictionary of game names to filenames.  Keep in mind game names are displayed on a 16x2 LCD display,
 # so some game names must be split with a newline or abbreviated to fit.  Feel free to change names to whatever
 # you like.  At load time, files that don't exist will be purge from the dictionary, so no need to trim this.  
@@ -167,7 +170,7 @@ games = {"Knights of Valor\nSeven Spirits":    "kov7spirits.bin",
          "Virtua Striker\n2002":               "vs2002e.bin",
          "Virtua Striker 4\nv2006":            "vs406.bin",
          "Virtua Striker 4\n2006 (Export)":    "Virtua_Striker_4_2006_Exp.bin"}
-commands = ["Change Target", "Download Update", "Shutdown", "Restart", "Enable DHCP", "Enable Static", "Ping Netdimm", "Create ROMS\nPartition"]
+commands = ["Change Target", "Download Update", "Shutdown", "Restart", "Enable DHCP", "Enable Static", "Ping Netdimm"]
 
 # Define a signal handler to turn off LCD before shutting down
 def handler(signum = None, frame = None):
@@ -177,8 +180,23 @@ def handler(signum = None, frame = None):
     sys.exit(0)
 signal.signal(signal.SIGTERM , handler)
 
-# We are up, so tell systemd
-daemon.notify("READY=1")
+# Initialize LCD and display welcome message
+lcd = Adafruit_CharLCDPlate()
+lcd.begin(16, 2)
+lcd.message(" Piforce Tools\n   Ver. 1.2")
+sleep(2)
+
+# If necessary, create ROMS partition and reboot
+if not os.path.exists(rom_dir):
+    lcd.clear()
+    lcd.message("Creating\nPartition...")
+    lcd.setCursor(12,1)
+    lcd.ToggleBlink()
+    os.system("./create_rompart.sh")
+    lcd.clear()
+    lcd.message("Partitioned!\nRebooting...")
+    sleep(2)
+    os.system("shutdown -r now")
 
 # Purge game dictionary of game files that can't be found
 missing_games = []
@@ -188,21 +206,15 @@ for key, value in games.iteritems():
 for missing_game in missing_games:
     del games[missing_game]
 
-# Remove commands if a network script is missing, or if partition already created
+# Remove commands if a network script is missing
 if not os.path.exists("netctl/ethernet-dhcp"):
     commands.remove("Enable DHCP")
 if not os.path.exists("netctl/ethernet-static"):
     commands.remove("Enable Static")
-if os.path.exists("/roms"):
-    commands.remove("Create ROMS\nPartition")
 
 # Initialize LCD
 pressedButtons = []
 curr_ip = 0
-lcd = Adafruit_CharLCDPlate()
-lcd.begin(16, 2)
-lcd.message(" Piforce Tools\n   Ver. 1.1")
-sleep(2)
 lcd.clear()
 if len(games) is 0:
     lcd.clear()
@@ -282,16 +294,6 @@ while True:
                 sleep(2)
                 lcd.clear()
                 lcd.message(selection)
-            elif selection is "Create ROMS\nPartition":
-                lcd.clear()
-                lcd.message("Creating/Formatting\nPartition...")
-                lcd.setCursor(12,1)
-                lcd.ToggleBlink()
-                response = os.system("./create_rompart.sh")
-                lcd.clear()
-                lcd.message("Partitioned!\nRebooting...")
-                sleep(2)
-                os.system("shutdown -r now")
             elif selection is "Ping Netdimm":
                 lcd.clear()
                 lcd.message("Pinging\n"+ips[curr_ip])
