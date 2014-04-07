@@ -16,7 +16,7 @@ daemon.notify("READY=1")
 # If you have a ROM dump with a different filename, either rename the .bin file or change the config here. 
 
 ips = ["192.168.1.2", "192.168.1.3", "192.168.1.4", "192.168.1.5"] # Add or remove as many endpoints as you want
-rom_dir = "/roms/"  # Set absolute path of rom files ending with trailing /
+rom_dir = "/boot/roms/"  # Set absolute path of rom files ending with trailing /
 
          # Atomiswave Games
 games = {"Knights of Valor\nSeven Spirits":    "kov7spirits.bin",
@@ -170,7 +170,7 @@ games = {"Knights of Valor\nSeven Spirits":    "kov7spirits.bin",
          "Virtua Striker\n2002":               "vs2002e.bin",
          "Virtua Striker 4\nv2006":            "vs406.bin",
          "Virtua Striker 4\n2006 (Export)":    "Virtua_Striker_4_2006_Exp.bin"}
-commands = ["Change Target", "Download Update", "Shutdown", "Restart", "Enable DHCP", "Enable Static", "Ping Netdimm"]
+commands = ["Ping Netdimm", "Change Target"]
 
 # Define a signal handler to turn off LCD before shutting down
 def handler(signum = None, frame = None):
@@ -180,24 +180,6 @@ def handler(signum = None, frame = None):
     sys.exit(0)
 signal.signal(signal.SIGTERM , handler)
 
-# Initialize LCD and display welcome message
-lcd = Adafruit_CharLCDPlate()
-lcd.begin(16, 2)
-lcd.message(" Piforce Tools\n   Ver. 1.2")
-sleep(2)
-
-# If necessary, create ROMS partition and reboot
-if not os.path.exists(rom_dir):
-    lcd.clear()
-    lcd.message("Creating\nPartition...")
-    lcd.setCursor(12,1)
-    lcd.ToggleBlink()
-    os.system("./create_rompart.sh")
-    lcd.clear()
-    lcd.message("Partitioned!\nRebooting...")
-    sleep(2)
-    os.system("shutdown -r now")
-
 # Purge game dictionary of game files that can't be found
 missing_games = []
 for key, value in games.iteritems():
@@ -206,13 +188,11 @@ for key, value in games.iteritems():
 for missing_game in missing_games:
     del games[missing_game]
 
-# Remove commands if a network script is missing
-if not os.path.exists("netctl/ethernet-dhcp"):
-    commands.remove("Enable DHCP")
-if not os.path.exists("netctl/ethernet-static"):
-    commands.remove("Enable Static")
-
 # Initialize LCD
+lcd = Adafruit_CharLCDPlate()
+lcd.begin(16, 2)
+lcd.message(" Piforce Tools\nVer. 1.2 (BETA)")
+sleep(2)
 pressedButtons = []
 curr_ip = 0
 lcd.clear()
@@ -222,7 +202,8 @@ if len(games) is 0:
     sleep(1)
     iterator  = iter(commands)
     selection = iterator.next()
-    mode = "commands"    
+    mode = "commands"
+    lcd.message(selection)
 else:
     iterator  = iter(collections.OrderedDict(sorted(games.items(), key=lambda t: t[0])))
     selection = iterator.next()
@@ -235,75 +216,21 @@ while True:
     if lcd.buttonPressed(lcd.SELECT):
         if lcd.SELECT not in pressedButtons:
             pressedButtons.append(lcd.SELECT)
-            if selection is "Shutdown":
-                os.system("shutdown -h now")
-            elif selection is "Restart":    
-                os.system("shutdown -r now")
-            elif selection is "Change Target":
+            if selection is "Change Target":
                 curr_ip += 1
                 if curr_ip >= len(ips):
                     curr_ip = 0
                 lcd.message("\n"+ips[curr_ip])
-            elif selection is "Download Update":
-                lcd.clear()
-                lcd.message("Downloading...")
-                lcd.setCursor(14, 0)
-                lcd.ToggleBlink()
-                os.system("mount -o rw,remount /")
-                try:
-                    response = subprocess.check_output(["git", "pull"])
-                except:
-                    response = "Update Error:\nCheck Internet"
-                os.system("mount -o ro,remount /")
-                if response.strip() == "Already up-to-date.":
-                    message = "No Update Found"
-                else:
-                    message = response.strip()
-                lcd.ToggleBlink()
-                lcd.clear()
-                lcd.message(message)
-                sleep(2)
-                lcd.clear()
-                lcd.message(selection)
-            elif selection is "Enable DHCP":
-                os.system("mount -o rw,remount /")
-                os.system("cp netctl/ethernet-dhcp /etc/netctl/eth0")
-                os.system("mount -o ro,remount /")
-                lcd.clear()
-                lcd.message("Obtaining IP...")
-                lcd.setCursor(15,0)
-                lcd.ToggleBlink()
-                os.system("ip link set eth0 down")
-                os.system("netctl restart eth0")
-                ip = socket.gethostbyname(socket.getfqdn())
-                lcd.ToggleBlink()
-                lcd.clear()                
-                lcd.message("Enabled DHCP:\n"+ip)
-                sleep(2)
-                lcd.clear()
-                lcd.message(selection)
-            elif selection is "Enable Static":
-                os.system("mount -o rw,remount /")
-                os.system("cp netctl/ethernet-static /etc/netctl/eth0")
-                os.system("mount -o ro,remount /")
-                os.system("ip link set eth0 down")
-                os.system("netctl restart eth0")
-                ip = socket.gethostbyname(socket.getfqdn())
-                lcd.clear()
-                lcd.message("Enabled Static:\n"+ip)
-                sleep(2)
-                lcd.clear()
-                lcd.message(selection)
             elif selection is "Ping Netdimm":
                 lcd.clear()
                 lcd.message("Pinging\n"+ips[curr_ip])
                 response = os.system("ping -c 1 "+ips[curr_ip])
                 lcd.clear()
                 if response == 0:
-                    lcd.message("Netdimm is\nreachable!")
+                    lcd.message("SUCCESS!")
                 else:
                     lcd.message("Netdimm is\nunreachable!")
-                sleep(1)
+                sleep(2)
                 lcd.clear()
                 lcd.message(selection)
             else:
