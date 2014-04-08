@@ -197,12 +197,12 @@ pressedButtons = []
 curr_ip = 0
 lcd.clear()
 if len(games) is 0:
-    lcd.clear()
     lcd.message("NO GAMES FOUND!")
     sleep(1)
     iterator  = iter(commands)
     selection = iterator.next()
     mode = "commands"
+    lcd.clear()
     lcd.message(selection)
 else:
     iterator  = iter(collections.OrderedDict(sorted(games.items(), key=lambda t: t[0])))
