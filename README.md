@@ -15,7 +15,12 @@ Left/Right buttons determine Game mode or Command mode respectively.  Up/Down na
 You will need the following items to use Piforce Tools:
 
 1. A Raspberry Pi - http://www.raspberrypi.org/ 
-2. An SD Card imaged with the Piforce Tools image.  16GB - http://capane.us/downloads/piforcetools-16gb.img.zip 32GB -  http://capane.us/downloads/piforcetools-32gb.img.zip
+2. An SD Card imaged with the Piforce Tools image.
+
+    16GB - http://downloads.capane.us/piforcetools-16gb.img.zip
+
+    32GB - http://downloads.capane.us/piforcetools-32gb.img.zip
+    
 3. An assembled Adafruit 16x2 LCD Plate - http://learn.adafruit.com/adafruit-16x2-character-lcd-plus-keypad-for-raspberry-pi
 4. A Naomi, Triforce, or Chihiro arcade system.
 5. A Netdimm with a zero-key security PIC installed.  I cannot provide links for this, but a modicum of Google-fu will get you what you need.  The netdimm will need to be configured in static mode with an IP address of 192.168.1.2, netmask of 255.255.255.0, and gateway of 192.168.1.1.
