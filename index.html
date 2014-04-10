@@ -32,7 +32,6 @@
 <a name="piforcetools" class="anchor" href="#piforcetools"><span class="octicon octicon-link"></span></a>PiforceTools</h1>
 
 <p>Piforce Tools drives a Raspberry Pi with Adafruit LCD Plate and interfaces with debugmode's triforce tools to load a NetDIMM board with binaries for a Triforce, Naomi, or Chihiro arcade system.  </p>
-<p><iframe width="560" height="315" src="//www.youtube.com/embed/7wv3M2_xrmI" frameborder="0" allowfullscreen></iframe></p>
 
 <h2>
 <a name="usage" class="anchor" href="#usage"><span class="octicon octicon-link"></span></a>Usage</h2>
@@ -40,22 +39,24 @@
 <p>Left/Right buttons determine Game mode or Command mode respectively.  Up/Down navigate items within a mode.  Select button will select the item being displayed.  In Command mode, the following commands can be used:</p>
 
 <ol>
-<li>Shutdown - To prevent boot failures, make sure you select Shutdown and wait for all lights to go out (except the red one) before removing power.</li>
-<li>Restart - To force a restart</li>
-<li>Enable DHCP - To switch back to a normal DHCP configuration, select this, and reboot the Pi.</li>
-<li>Enable Static - To switch back to a static configuration, select this, and reboot the Pi</li>
-<li>Ping Netdimm - To test if the Netdimm is reachable via a ping</li>
+<li>Change Target - By default, you can send binaries to up to 4 nodes, configured at 192.168.1.2, 192.168.1.3, 192.168.1.4, 192.168.1.5.  Each time you select Change Target, the target will be changed.</li>
+<li>Ping Netdimm - To test if the Netdimm is reachable via a ping.<br>
+</li>
 </ol><h2>
-<a name="getting-stated" class="anchor" href="#getting-stated"><span class="octicon octicon-link"></span></a>Getting Stated</h2>
+<a name="getting-started" class="anchor" href="#getting-started"><span class="octicon octicon-link"></span></a>Getting Started</h2>
 
 <p>You will need the following items to use Piforce Tools:</p>
 
 <ol>
 <li>A Raspberry Pi - <a href="http://www.raspberrypi.org/">http://www.raspberrypi.org/</a> </li>
-<li>An SD Card imaged with Raspbian - <a href="http://www.raspberrypi.org/downloads">http://www.raspberrypi.org/downloads</a>
+<li>
+<p>An SD Card imaged with the Piforce Tools image.</p>
+
+<p>16GB - <a href="http://downloads.capane.us/piforcetools-16gb.img.zip">http://downloads.capane.us/piforcetools-16gb.img.zip</a></p>
+
+<p>32GB - <a href="http://downloads.capane.us/piforcetools-32gb.img.zip">http://downloads.capane.us/piforcetools-32gb.img.zip</a></p>
 </li>
-<li>An assembled Adafruit 16x2 LCD Plate - <a href="http://learn.adafruit.com/adafruit-16x2-character-lcd-plus-keypad-for-raspberry-pi">http://learn.adafruit.com/adafruit-16x2-character-lcd-plus-keypad-for-raspberry-pi</a>
-</li>
+<li><p>An assembled Adafruit 16x2 LCD Plate - <a href="http://learn.adafruit.com/adafruit-16x2-character-lcd-plus-keypad-for-raspberry-pi">http://learn.adafruit.com/adafruit-16x2-character-lcd-plus-keypad-for-raspberry-pi</a></p></li>
 <li>A Naomi, Triforce, or Chihiro arcade system.</li>
 <li>A Netdimm with a zero-key security PIC installed.  I cannot provide links for this, but a modicum of Google-fu will get you what you need.  The netdimm will need to be configured in static mode with an IP address of 192.168.1.2, netmask of 255.255.255.0, and gateway of 192.168.1.1.</li>
 <li>A crossover cable</li>
@@ -65,34 +66,13 @@
 <p>Now you are finally ready to install Piforce Tools.</p>
 
 <ol>
-<li>
-<p>Use aptitude to install the following packages:</p>
-
-<pre><code>sudo apt-get install python-smbus
-sudo apt-get install python-crypto
-</code></pre>
+<li>Image the appropriate image file to the SD card.  If you are using Windows, look for Win32DiskImager.  If you are using Linux or Mac OS, you will use the command line tool dd.  Imaging an SD card is easy, but here is some more information - <a href="http://elinux.org/ArchLinux_Install_Guide">http://elinux.org/ArchLinux_Install_Guide</a>
 </li>
-<li>
-<p>Use git to clone piforce tools repo to your pi:</p>
-
-<pre><code>cd /home/pi
-git clone https://github.com/capane-us/piforcetools.git
-cd piforcetools
-chmod u+x install.sh
-sudo ./install.sh
-</code></pre>
-
-<p>After you install Piforce Tools, on the next boot, your Pi will be configured to have a static assignment of 192.168.1.1.</p>
-</li>
-<li><p>Copy roms you want to load to /home/pi/roms.  You can use scp, ftp, or wget to get them into this directory, or you can mount a USB drive and copy them.</p></li>
-<li><p>(Optional) Edit piforcetools.py if your roms have different files names, or if you want to change the display name.</p></li>
-<li><p>Reboot</p></li>
-</ol><p>If everything worked, after about 20 seconds you should see the LCD turn on and display the Piforce Tools splash message.  </p>
-
-<h2>
+<li>Load up ROMs in the "roms" directory.</li>
+</ol><h2>
 <a name="troubleshooting" class="anchor" href="#troubleshooting"><span class="octicon octicon-link"></span></a>Troubleshooting</h2>
 
-<p>I provide this script without warranty, and its not feasible to provide support to everyone, but I want to at least provide some troubleshooting steps </p>
+<p>I provide this script and image without warranty, and its not feasible to provide support to everyone, but I want to at least provide some troubleshooting steps </p>
 
 <ul>
 <li>
