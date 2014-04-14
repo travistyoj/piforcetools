@@ -49,14 +49,9 @@
 
 <ol>
 <li>A Raspberry Pi - <a href="http://www.raspberrypi.org/">http://www.raspberrypi.org/</a> </li>
-<li>
-<p>An SD Card imaged with the Piforce Tools image.</p>
-
-<p>16GB - <a href="http://downloads.capane.us/piforcetools-16gb.img.zip">http://downloads.capane.us/piforcetools-16gb.img.zip</a></p>
-
-<p>32GB - <a href="http://downloads.capane.us/piforcetools-32gb.img.zip">http://downloads.capane.us/piforcetools-32gb.img.zip</a></p>
+<li>An SD Card (Minimum 4GB, but I recommend at 8GB or higher)</li>
+<li>An assembled Adafruit 16x2 LCD Plate - <a href="http://learn.adafruit.com/adafruit-16x2-character-lcd-plus-keypad-for-raspberry-pi">http://learn.adafruit.com/adafruit-16x2-character-lcd-plus-keypad-for-raspberry-pi</a>
 </li>
-<li><p>An assembled Adafruit 16x2 LCD Plate - <a href="http://learn.adafruit.com/adafruit-16x2-character-lcd-plus-keypad-for-raspberry-pi">http://learn.adafruit.com/adafruit-16x2-character-lcd-plus-keypad-for-raspberry-pi</a></p></li>
 <li>A Naomi, Triforce, or Chihiro arcade system.</li>
 <li>A Netdimm with a zero-key security PIC installed.  I cannot provide links for this, but a modicum of Google-fu will get you what you need.  The netdimm will need to be configured in static mode with an IP address of 192.168.1.2, netmask of 255.255.255.0, and gateway of 192.168.1.1.</li>
 <li>A crossover cable</li>
@@ -66,7 +61,11 @@
 <p>Now you are finally ready to install Piforce Tools.</p>
 
 <ol>
-<li>Image the appropriate image file to the SD card.  If you are using Windows, look for Win32DiskImager.  If you are using Linux or Mac OS, you will use the command line tool dd.  Imaging an SD card is easy, but here is some more information - <a href="http://elinux.org/ArchLinux_Install_Guide">http://elinux.org/ArchLinux_Install_Guide</a>
+<li>Downlad the piforce tools SD card image: <a href="http://downloads.capane.us/piforcetools.img.zip">http://downloads.capane.us/piforcetools.img.zip</a>
+</li>
+<li>Extract .img file, and use imager tool to write it to your SD card.  If you are using Windows, look for Win32DiskImager.  If you are using Linux or Mac OS, you will use the command line tool dd.  Imaging an SD card is easy, but here is some more information - <a href="http://elinux.org/ArchLinux_Install_Guide">http://elinux.org/ArchLinux_Install_Guide</a>
+</li>
+<li>Use a partition manager tool like Partition Wizard to move the Ext4 partition to the end of the card, and resize the FAT partition to use all unallocated space: <a href="http://www.partitionwizard.com/free-partition-manager.html">http://www.partitionwizard.com/free-partition-manager.html</a>
 </li>
 <li>Load up ROMs in the "roms" directory.</li>
 </ol><h2>
