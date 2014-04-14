@@ -15,12 +15,7 @@ Left/Right buttons determine Game mode or Command mode respectively.  Up/Down na
 You will need the following items to use Piforce Tools:
 
 1. A Raspberry Pi - http://www.raspberrypi.org/ 
-2. An SD Card imaged with the Piforce Tools image.
-
-    16GB - http://downloads.capane.us/piforcetools-16gb.img.zip
-
-    32GB - http://downloads.capane.us/piforcetools-32gb.img.zip
-    
+2. An SD Card (Minimum 4GB, but I recommend at 8GB or higher)
 3. An assembled Adafruit 16x2 LCD Plate - http://learn.adafruit.com/adafruit-16x2-character-lcd-plus-keypad-for-raspberry-pi
 4. A Naomi, Triforce, or Chihiro arcade system.
 5. A Netdimm with a zero-key security PIC installed.  I cannot provide links for this, but a modicum of Google-fu will get you what you need.  The netdimm will need to be configured in static mode with an IP address of 192.168.1.2, netmask of 255.255.255.0, and gateway of 192.168.1.1.
@@ -30,8 +25,10 @@ You will need the following items to use Piforce Tools:
 
 Now you are finally ready to install Piforce Tools.
 
-1. Image the appropriate image file to the SD card.  If you are using Windows, look for Win32DiskImager.  If you are using Linux or Mac OS, you will use the command line tool dd.  Imaging an SD card is easy, but here is some more information - http://elinux.org/ArchLinux_Install_Guide
-2. Load up ROMs in the "roms" directory.
+1. Downlad the piforce tools SD card image: http://downloads.capane.us/piforcetools.img.zip
+2. Extract .img file, and use imager tool to write it to your SD card.  If you are using Windows, look for Win32DiskImager.  If you are using Linux or Mac OS, you will use the command line tool dd.  Imaging an SD card is easy, but here is some more information - http://elinux.org/ArchLinux_Install_Guide
+3. Use a partition manager tool like Partition Manager to move the Ext4 partition to the end of the card, and resize the FAT partition to use all unallocated space: http://www.partitionwizard.com/free-partition-manager.html
+4. Load up ROMs in the "roms" directory.
 
 ## Troubleshooting
 I provide this script and image without warranty, and its not feasible to provide support to everyone, but I want to at least provide some troubleshooting steps 
