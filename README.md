@@ -27,7 +27,7 @@ Now you are finally ready to install Piforce Tools.
 
 1. Downlad the piforce tools SD card image: http://downloads.capane.us/piforcetools.img.zip
 2. Extract .img file, and use imager tool to write it to your SD card.  If you are using Windows, look for Win32DiskImager.  If you are using Linux or Mac OS, you will use the command line tool dd.  Imaging an SD card is easy, but here is some more information - http://elinux.org/ArchLinux_Install_Guide
-3. Use a partition manager tool like Partition Manager to move the Ext4 partition to the end of the card, and resize the FAT partition to use all unallocated space: http://www.partitionwizard.com/free-partition-manager.html
+3. Use a partition manager tool like Partition Wizard to move the Ext4 partition to the end of the card, and resize the FAT partition to use all unallocated space: http://www.partitionwizard.com/free-partition-manager.html
 4. Load up ROMs in the "roms" directory.
 
 ## Troubleshooting
