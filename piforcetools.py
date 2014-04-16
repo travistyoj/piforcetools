@@ -191,7 +191,7 @@ for missing_game in missing_games:
 # Initialize LCD
 lcd = Adafruit_CharLCDPlate()
 lcd.begin(16, 2)
-lcd.message(" Piforce Tools\nVer. 1.2 (BETA)")
+lcd.message(" Piforce Tools\n    Ver. 1.2")
 sleep(2)
 pressedButtons = []
 curr_ip = 0
